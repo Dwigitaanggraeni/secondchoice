@@ -12,6 +12,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url('dist/css/adminlte.min.css')}}">
   <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <style>
     /* Sidebar styles */
     .main-sidebar {
@@ -204,6 +205,15 @@
 
 <script src="{{url ('plugins/chart.js/Chart.min.js') }}"></script>
 <script src="{{url ('dist/js/pages/dashboard3.js') }}"></script>
+<script>
+    // Check if jQuery is loaded
+    if (typeof jQuery != 'undefined') {
+        console.log('jQuery is loaded');
+    } else {
+        console.log('jQuery is not loaded');
+    }
+</script>
+
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
   integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="

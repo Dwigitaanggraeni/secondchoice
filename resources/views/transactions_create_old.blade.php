@@ -5,7 +5,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Second Choice</h1>
+          <h1>Second Chois</h1>
         </div>
         
       </div>
@@ -18,19 +18,17 @@
     <!-- Default box -->
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Edit Data Transaksi</h3>
+        <h3 class="card-title">Tambah Data Transaksi</h3>
       </div>
       <div class="card-body">
         <a href="{{ route('transactions.index') }}" class="btn btn-default">Kembali</a>
         <br><br>
 
-      <form action="{{ route('transactions.update', $transactions->id) }}" method="POST">
+      <form action="{{ route('transactions.store') }}" method="POST">
         @csrf
-        @method('put')
         <div class="form-group">
             <label>Nomor Unik</label>
-            <input name="nomor_unik" type="number" class="form-control" placeholder="..." 
-            value="{{ $transactions->nomor_unik }}"
+            <input name="nomor_unik" type="number" class="form-control" placeholder="..." value="{{ random_int(1000000000, 9999999999); }}"
             readonly >
             @error('nomor_unik')
                 <p>{{ $message }}</p>
@@ -38,8 +36,7 @@
         </div>
         <div class="form-group">
             <label>Nama Pelanggan</label>
-            <input name="nama_pelanggan" type="text" class="form-control" placeholder="..."
-            value="{{ $transactions->nama_pelanggan }}" >
+            <input name="nama_pelanggan" type="text" class="form-control" placeholder="...">
             @error('nama_pelanggan')
                 <p>{{ $message }}</p>
             @enderror
@@ -49,14 +46,7 @@
             <select name="id_produk" class="form-control" required>
                 <option value="">- Pilih Produk -</option>
                 @foreach ($productsM as $data)
-                <?php
-                if ($data->id == $transactions->id_produk):
-                    $selected = "selected";
-                else:
-                    $selected = "";
-                endif;
-                ?>
-                <option {{ $selected }} value="{{ $data->id }}">
+                <option value="{{ $data->id }}">
                     {{ $data->nama_produk }} - {{ $data->harga_produk}}
                 </option>
                 @endforeach
@@ -67,22 +57,26 @@
         </div>
         <div class="form-group">
             <label>Uang Bayar</label>
-            <input name="uang_bayar" type="number" class="form-control" placeholder="..."
-            value="{{ $transactions->uang_bayar }}" >
+            <input name="uang_bayar" type="number" class="form-control" placeholder="...">
             @error('uang_bayar')
                 <p>{{ $message }}</p>
             @enderror
-        </div>
+          </div>
+
         <!-- <div class="form-group">
             <label>Uang Kembali</label>
             <input name="uang_kembali" type="text" class="form-control" placeholder="...">
             @error('uang_kembali')
                 <p>{{ $message }}</p>
             @enderror
-        </div> -->
-        <input type="submit" name="submit" class="btn btn-success" value="Edit">
+        </div>
+         -->
+      
+        <input type="submit" name="submit" class="btn btn-success" value="Tambah">
       </form>
     </div>
+
+  
       <!-- /.card-body -->
       <!-- /.card-footer-->
     </div>
