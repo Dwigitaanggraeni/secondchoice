@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsC;
 use App\Http\Controllers\TransactionsC;
+use App\Http\Controllers\MTransactionsC;
 use App\Http\Controllers\UsersR;
 use App\Http\Controllers\LoginC;
 use App\Http\Controllers\LogC;
@@ -38,6 +39,7 @@ Route::resource('products', ProductsC::class)->middleware('userAkses:owner,admin
  Route::get('transactions', [TransactionsC::class, 'index'])->name('transactions.index')->middleware('userAkses:kasir,owner');
  Route::get('transactions/create', [TransactionsC::class, 'create'])->name('transactions.create')->middleware('userAkses:kasir,admin');
  Route::post('transactions/store', [TransactionsC::class, 'store'])->name('transactions.store')->middleware('userAkses:kasir');
+ Route::post('mtransactions/store', [MTransactionsC::class, 'store'])->name('mtransactions.store')->middleware('userAkses:kasir');
 
  Route::get('transactions/edit/{id}', [TransactionsC::class, 'edit'])->name('transactions.edit')->middleware('userAkses:admin');
  Route::put('transactions/update/{id}', [TransactionsC::class, 'update'])->name('transactions.update')->middleware('userAkses:admin');

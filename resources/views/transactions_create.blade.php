@@ -24,7 +24,7 @@
             <a href="{{ route('transactions.index') }}" class="btn btn-default">Kembali</a>
             <br><br>
 
-            <form action="{{ route('transactions.store') }}" method="POST">
+            <form action="{{ route('mtransactions.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label>Nomor Unik</label>
