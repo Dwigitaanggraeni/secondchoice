@@ -9,11 +9,13 @@ class OrderdetailM extends Model
 {
     use HasFactory;
     protected $table = "tbl_order_details";
+    protected $guarded = []; //buat semua filed bisa diisi
 
     public function Mtransaction()
     {
-        return $this->belongsTo(MTransactionM::class); // satu detail transaksi merupakan child dari sebuah transkasi, ato satu transaksi dapat memiliki lebih dari 1 detail transaksi (sebagai penghubung relasi antara child dan parent nya)
+        return $this->belongsTo(MTransactionM::class, 'transaction_id');
     }
+    
 
     public function product()
     {
