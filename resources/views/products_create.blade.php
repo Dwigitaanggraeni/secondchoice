@@ -25,13 +25,18 @@
         <br><br>
 
       <form action="{{ route('products.store') }}" method="POST">
+      <!-- <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data"> -->
         @csrf
-        <div class="col-xs-12 col-sm-12 col-md-12">
+        <!-- <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Image:</strong>
-                <input type="file" name="image" class="form-control" placeholder="image">
+                <input type="file" name="image" class="form-control-file" id="image" accept="image/*">
+
+                @error('image')
+                <p>{{ $message }}</p>
+            @enderror
             </div>
-        </div>
+        </div> -->
         <div class="form-group">
             <label>Nama Produk</label>
             <input name="nama_produk" type="text" class="form-control" placeholder="...">
@@ -56,7 +61,7 @@
             </div>
         <div class="form-group">
                 <label >Pilih jenis</label>
-               <select name="JENIS" class="form-control" id="">
+               <select name="jenis" class="form-control" id="">
                 <option value="">---Pilih jenis---</option>
                 <option value="xs">Pans</option>
                 <option value="s">Knitware</option>
@@ -64,7 +69,7 @@
                 <option value="l">Hoodie</option>
                 <option value="xl">jacket</option>
                </select>
-                @error('JENIS')
+                @error('jenis')
                 <p>{{$message}}</p>     
                 @enderror
             </div>

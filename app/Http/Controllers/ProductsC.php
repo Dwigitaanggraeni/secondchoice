@@ -24,6 +24,11 @@ class ProductsC extends Controller
             'activity' => 'User Melihat Halaman Produk'
         ]);
 
+        // $products = Products::latest()->paginate(5);
+     
+        // return view('products_index',compact('products'))
+        //     ->with('i', (request()->input('page', 1) - 1) * 5);
+
         $subtitle = "Daftar Produk";
         // $productsM = ProductsM::all();
         // return view('products_index', compact('subtitle', 'productsM'));
@@ -55,21 +60,86 @@ class ProductsC extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        // dd($request);
-        $LogM = LogM::create([
-            'id_user' => Auth::user()->id,
-            'activity' => 'User Melakukan Proses Tambah Produk'
-        ]);
+    // public function store(Request $request)
+    // {
 
-        $request->validate([
-            'nama_produk' => 'required',
-            'harga_produk' => 'required',
-        ]);
-        productsM::create($request->post());
-        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan');
-    }
+    //     try {
+    //         $LogM = LogM::create([
+    //             'id_user' => Auth::user()->id,
+    //             'activity' => 'User Melakukan Proses Tambah Produk'
+                
+    //         ]);
+    
+    //         $request->validate([
+    //             'nama_produk' => 'required',
+    //             'harga_produk' => 'required',
+    //             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    //         ]);
+    
+    //         $input = $request->all();
+       
+    //         if ($image = $request->file('image')) {
+    //             $destinationPath = 'images/';
+    //             $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+    //             $image->move($destinationPath, $profileImage);
+    //             $input['image'] = "$profileImage";
+    //         }
+    //         productsM::create($request->post());
+    //         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan');
+    //     } catch (Throwable $e) {
+    //         report($e);
+     
+    //         return false;
+    //     }
+    
+    //     // dd($request);
+        
+    // }
+    public function store(Request $request) 
+{ 
+    try { 
+        $logM = LogM::create([ 
+            'id_user' => Auth::user()->id, 
+            'activity' => 'User Melakukan Proses Tambah Produk' 
+        ]); 
+
+        $request->validate([ 
+            'nama_produk' => 'required', 
+            'harga_produk' => 'required', 
+            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
+        ]); 
+
+        // $input = $request->all(); 
+        // dd($input, $request->hasFile('image'));
+
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     if ($image->isValid()) {
+        //         $destinationPath = 'images/'; 
+        //         $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension(); 
+        //         $image->move($destinationPath, $profileImage); 
+        //         $input['image'] = $profileImage;
+        //     } else {
+        //         dd("salah gambar");
+        //         return redirect()->back()->withErrors(['image' => 'Invalid image file.'])->withInput();
+        //     }
+        // }
+        // else{dd("$request->hasFile filed");}
+
+        // $createdProduct = productsM::create($input);
+         productsM::create($request->all());
+
+        // Log the result or any relevant information
+        // Log::info('Product created:', ['product_id' => $createdProduct->id, 'name' => $createdProduct->nama_produk]);
+        // dd($request->all());
+
+        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan'); 
+    } catch (\Exception $e) { 
+        report($e); 
+        return redirect()->back()->withErrors(['error' => 'Something went wrong.'])->withInput(); 
+    } 
+}
+
 
     /**
      * Display the specified resource.
