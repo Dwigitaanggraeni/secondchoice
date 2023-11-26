@@ -35,11 +35,13 @@ Route::get('login',[LoginC::class, 'login'])->name('login')->middleware('guest')
 
 Route::resource('products', ProductsC::class)->middleware('userAkses:owner,admin,kasir');
 
+// multiple transaction
+Route::get('transactions', [MTransactionsC::class, 'index'])->name('mtransactions.index')->middleware('userAkses:kasir');
+Route::post('mtransactions/store', [MTransactionsC::class, 'store'])->name('mtransactions.store')->middleware('userAkses:kasir');
 
- Route::get('transactions', [TransactionsC::class, 'index'])->name('transactions.index')->middleware('userAkses:kasir,owner');
+//  Route::get('transactions', [TransactionsC::class, 'index'])->name('transactions.index')->middleware('userAkses:kasir,owner');
  Route::get('transactions/create', [TransactionsC::class, 'create'])->name('transactions.create')->middleware('userAkses:kasir,admin');
  Route::post('transactions/store', [TransactionsC::class, 'store'])->name('transactions.store')->middleware('userAkses:kasir');
- Route::post('mtransactions/store', [MTransactionsC::class, 'store'])->name('mtransactions.store')->middleware('userAkses:kasir');
 
  Route::get('transactions/edit/{id}', [TransactionsC::class, 'edit'])->name('transactions.edit')->middleware('userAkses:admin');
  Route::put('transactions/update/{id}', [TransactionsC::class, 'update'])->name('transactions.update')->middleware('userAkses:admin');

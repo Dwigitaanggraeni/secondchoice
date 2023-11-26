@@ -12,6 +12,31 @@ use Illuminate\Support\Facades\DB;
 
 class MTransactionsC extends Controller
 {
+
+    // public function index() {
+    //     $subtitle = "Daftar Transaksi Produk";
+    //     $vcari = request('search');
+    
+    //     $transactionsM = MTransactionM::with(['orderdetails.product'])
+    //         ->where('nama_pelanggan', 'LIKE', '%' . $vcari . '%')
+    //         ->get();
+    
+    //         dd($transactionsM);
+    //     return view('transactions_index', compact('subtitle', 'transactionsM', 'vcari'));
+    // }
+// TransactionController.php
+
+public function index() {
+    $subtitle = "Daftar Transaksi Produk";
+    $vcari = request('search');
+
+    $transactionsM = MTransactionM::with(['details.product'])
+        ->where('nama_pelanggan', 'LIKE', '%' . $vcari . '%')
+        ->get();
+
+    return view('transactions_index', compact('subtitle', 'transactionsM', 'vcari'));
+}
+
 public function store(Request $request)
 {
     // dd($request);
