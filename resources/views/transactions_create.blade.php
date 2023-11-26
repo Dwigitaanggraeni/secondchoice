@@ -2,15 +2,15 @@
 
 @section('content')
 <!-- Content Header (Page header) -->
-<!-- <section class="content-header">
+<section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Second Choice</h1>
+                <h1>Tambah Data Transaksi</h1>
             </div>
         </div>
     </div>
-</section> -->
+</section>
 
 <!-- Main content -->
 <section class="content">
@@ -21,8 +21,6 @@
             <h3 class="card-title">Tambah Data Transaksi</h3>
         </div>
         <div class="card-body">
-            <br><br>
-
             <form action="{{ route('mtransactions.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
@@ -42,23 +40,25 @@
                 </div>
 
                 <!-- Dynamic Product Selection Field -->
-                <div id="productContainer">
-                    <div class="form-group product-row">
-                        <label>Nama Produk + Harga</label>
-                        <div class="input-group">
-                            <select name="id_produk[]" class="form-control product-select" required>
-                                <option value="">- Pilih Produk -</option>
-                                @foreach ($productsM as $data)
-                                <option value="{{ $data->id }}" data-harga="{{ $data->harga_produk }}">
-                                    {{ $data->nama_produk }} - {{ $data->harga_produk}}
-                                </option>
-                                @endforeach
-                            </select>
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-success addProduct">+</button>
-                                <button type="button" class="btn btn-danger removeProduct">-</button>
+                <div class="form-group product-row">
+                    <label for="id_produk">Nama Produk + Harga</label>
+                    <div class="card-deck">
+                        @foreach ($productsM as $data)
+                            <div class="card" style="width: 18rem;">
+                                <img src="{{ asset('images/product/' . $data->image) }}" class="card-img-top"
+                                    alt="{{ $data->nama_produk }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $data->nama_produk }}</h5>
+                                    <p class="card-text">Harga: {{ $data->harga_produk }}</p>
+                                    <input type="checkbox" name="id_produk[]" value="{{ $data->id }}"
+                                        data-harga="{{ $data->harga_produk }}" style="margin-top: 10px;"> Pilih
+                                </div>
                             </div>
-                        </div>
+                        @endforeach
+                    </div>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-primary" id="prevPage">Previous</button>
+                        <button type="button" class="btn btn-primary" id="nextPage">Next</button>
                     </div>
                 </div>
 
@@ -88,66 +88,77 @@
                 <input type="submit" name="submit" class="btn btn-success" value="Tambah">
             </form>
         </div>
-
-        <!-- /.card-body -->
-        <!-- /.card-footer-->
     </div>
-    <!-- /.card -->
-
 </section>
-<!-- /.content -->
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    // Counter to keep track of product rows
-    var productCounter = 1;
+    $(document).ready(function () {
+        var pageSize = 4;
 
-    // Function to add a new product selection field
-    function addProductField() {
-        // Clone the original product row
-        var clonedRow = $('.product-row:first').clone();
+        updateDisplay();
 
-        // Increment the product counter
-        productCounter++;
+        $('#nextPage').click(function () {
+            updateDisplay('next');
+        });
 
-        // Update the name and id attributes of the cloned dropdown
-        clonedRow.find('select[name="id_produk[]"]').attr('name', 'id_produk[' + productCounter + ']');
-        clonedRow.find('select[name="id_produk[]"]').attr('id', 'id_produk_' + productCounter);
+        $('#prevPage').click(function () {
+            updateDisplay('prev');
+        });
 
-        // Append the cloned row to the container
-        $('#productContainer').append(clonedRow);
-    }
+        function updateDisplay(action) {
+            var startIndex;
+            var endIndex;
 
-    // Function to remove the last product selection field
-    function removeProductField() {
-        if (productCounter > 1) {
-            $('#productContainer .product-row:last').remove();
-            productCounter--;
+            if (action === 'next') {
+                startIndex = $('.card-deck .card:visible:last').index() + 1;
+            } else if (action === 'prev') {
+                startIndex = $('.card-deck .card:visible:first').index() - pageSize;
+            } else {
+                startIndex = 0;
+            }
+
+            startIndex = Math.max(startIndex, 0);
+
+            endIndex = startIndex + pageSize;
+
+            // Dynamically create invisible cards to fill the remaining space
+            var remaining = pageSize - (endIndex - startIndex);
+            if (remaining > 0) {
+                var invisibleCards = createInvisibleCards(remaining);
+                $('.card-deck').append(invisibleCards);
+            }
+
+            $('.card-deck .card').hide();
+            $('.card-deck .card').slice(startIndex, endIndex + remaining).show();
+
+            // Enable/disable Previous button based on the condition
+            $('#prevPage').prop('disabled', startIndex === 0);
         }
+
+        // Event listener for checkbox change
+        $('.product-row').on('change', 'input[type="checkbox"]', function () {
+            calculateTotal();
+        });
+    });
+
+    // Function to create invisible cards
+    function createInvisibleCards(count) {
+        var invisibleCards = '';
+
+        for (var i = 0; i < count; i++) {
+            invisibleCards += '<div class="card card-invisible"></div>';
+        }
+
+        return invisibleCards;
     }
 
-    // Add event listener for the "+" button
-    $(document).on('click', '.addProduct', function () {
-        addProductField();
-    });
-
-    // Add event listener for the "-" button
-    $(document).on('click', '.removeProduct', function () {
-        removeProductField();
-        calculateTotal();
-    });
-
-    // Add event listener for product selection change
-    $(document).on('change', '.product-select', function () {
-        calculateTotal();
-    });
-
-// Function to calculate the total amount
-function calculateTotal() {
+    // Function to calculate the total amount
+    function calculateTotal() {
         var total = 0;
 
-        $('.product-select').each(function () {
-            var harga = $(this).find(':selected').data('harga');
+        $('.product-row input:checked').each(function () {
+            var harga = $(this).data('harga');
             if (harga) {
                 total += parseFloat(harga);
             }
@@ -174,22 +185,15 @@ function calculateTotal() {
 
             // Change color based on the condition
             $('#uangKembali').css('color', uangKembali >= 0 ? 'green' : 'red');
-
-            // Enable/disable the Tambah button based on the condition
-            $('#tambahButton').prop('disabled', uangKembali < 0);
         } else {
             // Display an empty string and set color to black if the input values are not valid numbers
             $('#uangKembali').val('');
             $('#uangKembali').css('color', 'black');
-
-            // Disable the Tambah button if the input values are not valid numbers
-            $('#tambahButton').prop('disabled', true);
         }
     }
 
     // Initial calculation when the page loads
     calculateTotal();
-
-</script>
+</script>   
 
 @endsection
