@@ -17,7 +17,7 @@
     /* Sidebar styles */
     .main-sidebar {
       background-color: #d8bfd8; /* Custom color for the sidebar */
-      color: #ffffff; /* Text color for the sidebar */
+      color: #800080; /* Text color for the sidebar */
     }
   </style>
 </head>
@@ -59,7 +59,7 @@
           <!-- <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"> -->
         <!-- </div> -->
         <div class="info">
-          <a href="#" class="d-block">Hi, {{ Auth::user()->name}} <br>[{{ Auth::user()->role}}]</a>
+        <a href="#" class="d-block" style="color: #800080;">Hi, {{ Auth::user()->name }} <br>[{{ Auth::user()->role }}]</a>
         </div>
       </div>
 

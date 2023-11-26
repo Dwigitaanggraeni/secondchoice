@@ -19,18 +19,20 @@
             <h3 class="card-title">Daftar Activity</h3>
         </div>
 
-        <div id="myTable" class="card-body">
-            <thead>
+        <div class="card-body">
+            
             @if($message = Session::get('success'))
             <div class="alert alert-success">{{ $message }}</div>
             @endif
             <br>
-            <table class="table table-striped table-bordered">
+            <table id="myTable" class="table table-striped table-bordered" style="background-color: #d8bfd8;">
+            <thead>
                 <tr>
                     <th style="text-align: center; vertical-align: middle;">Nama User</th>
                     <th style="text-align: center; vertical-align: middle;">Activity</th>
                     <th style="text-align: center; vertical-align: middle;">Tanggal & Waktu</th>
                 </tr>
+                </thead>
                 @if(count($LogM) > 0)
                 @foreach ($LogM as $data)
                 <tr>
@@ -41,9 +43,10 @@
                 @endforeach
                 @else
                 <tr>
+                    
                     <td colspan="3" style="text-align: center; vertical-align: middle;">Data Tidak Ditemukan</td>
                 </tr>
-</thead>
+
                 @endif
             </table>
 

@@ -28,7 +28,7 @@
         @endif
         <a href="{{ route('users.create') }}" class="btn btn-success">Tambah Data</a>
         <br><br>
-       <table id="myTable" class="table table-striped table-bordered">
+        <table id="myTable" class="table table-striped table-bordered" style="background-color: #d8bfd8;">
         <thead>
 <tr class="bg-dark">
   <th>Nama Lengkap</th>

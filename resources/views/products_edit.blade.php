@@ -38,12 +38,12 @@
                 <label >Pilih Size</label>
                <select name="size" class="form-control" id="">
                 <option value="">---Pilih Size---</option>
-                <option value="xs">XS</option>
-                <option value="s">S</option>
-                <option value="m">M</option>
-                <option value="l">L</option>
-                <option value="xl">XL</option>
-                <option value="xxl">XXL</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
                </select>
                 @error('size')
                 <p>{{$message}}</p>     
@@ -53,11 +53,11 @@
                 <label >Pilih jenis</label>
                <select name="JENIS" class="form-control" id="">
                 <option value="">---Pilih jenis---</option>
-                <option value="xs">Pans</option>
-                <option value="s">Knitware</option>
-                <option value="m">Crewneck</option>
-                <option value="l">Hoodie</option>
-                <option value="xl">jacket</option>
+                <option value="pans">Pans</option>
+                <option value="knitware">Knitware</option>
+                <option value="crewneck">Crewneck</option>
+                <option value="hoodie">Hoodie</option>
+                <option value="jacket">jacket</option>
                </select>
                 @error('JENIS')
                 <p>{{$message}}</p>     

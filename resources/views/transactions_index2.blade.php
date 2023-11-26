@@ -32,7 +32,7 @@
           <tr>
 
           @if (Auth::user()->role == 'owner')
-          <form action="{{ route('transactions.index') }}" method="get">
+          <!-- <form action="{{ route('transactions.index') }}" method="get">
           <div class="input-group">
             <input type="search" name="search" class="form-control" placeholder="Search" value="{{$vcari}}">
             <button type="submit" class="btn btn-outline-primary mr-1"><i class="fa fa-search"></i></button>
@@ -40,7 +40,7 @@
             <a href="{{ route('transactions.index')}}">
               <button type="button" class="btn btn-outline-danger"><i class="fa fa-undo"></i></button>
           </div>
-          </form>
+          </form> -->
           @endif
           <br>
       

@@ -45,7 +45,9 @@
 </form> -->
 @endif
 
-<table id="myTable" class="table table-striped table-bordered">
+<!-- <table id="myTable" class="table table-striped table-bordered"> -->
+<table id="myTable" class="table table-striped table-bordered" style="background-color: #d8bfd8;">
+
 <thead>
   <tr class="bg-dark">
   <th>Nama Produk</th>
