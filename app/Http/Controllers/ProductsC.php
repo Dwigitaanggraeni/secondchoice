@@ -97,6 +97,7 @@ class ProductsC extends Controller
     // }
     public function store(Request $request) 
 { 
+    // dd($request);
     try { 
         $logM = LogM::create([ 
             'id_user' => Auth::user()->id, 
@@ -106,6 +107,8 @@ class ProductsC extends Controller
         $request->validate([ 
             'nama_produk' => 'required', 
             'harga_produk' => 'required', 
+            'jenis' => 'required|in:pans,knitware,crewneck,hoodie,jacket', // validate jenis
+            'size' => 'required|in:XS,S,M,L,XL,XXL', // validate size
             // 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
         ]); 
 

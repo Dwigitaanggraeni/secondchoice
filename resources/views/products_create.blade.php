@@ -61,7 +61,7 @@
             </div>
         <div class="form-group">
                 <label >Pilih jenis</label>
-               <select name="JENIS" class="form-control" id="">
+               <select name="jenis" class="form-control" id="">
                 <option value="">---Pilih jenis---</option>
                 <option value="pans">Pans</option>
                 <option value="knitware">Knitware</option>
@@ -69,10 +69,10 @@
                 <option value="hoodie">Hoodie</option>
                 <option value="jacket">jacket</option>
                </select>
-                @error('JENIS')
+                @error('jenis')
                 <p>{{$message}}</p>     
                 @enderror
-            </div>x
+            </div>
         <div class="form-group">
             <label>Harga Produk</label>
             <input name="harga_produk" type="number" class="form-control" placeholder="...">

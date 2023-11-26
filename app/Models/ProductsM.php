@@ -10,7 +10,7 @@ class ProductsM extends Model
 {
     use HasFactory;
     protected $table = "products";
-    protected $fillable = ["id", "nama_produk", "harga_produk"];
+    protected $fillable = ["id", "nama_produk", "harga_produk", "jenis", "size"];
 
     public function searchableAs()
 {
