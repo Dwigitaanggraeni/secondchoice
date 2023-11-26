@@ -14,7 +14,7 @@ class MTransactionM extends Model
     
     public function details()
     {
-        return $this->hasMany(OrderdetailM::class);
+        return $this->hasMany(OrderdetailM::class, 'transaction_id');
     }
 
     public function user()
