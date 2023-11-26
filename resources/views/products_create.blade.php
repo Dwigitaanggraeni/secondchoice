@@ -24,10 +24,10 @@
         <a href="{{ route('products.index') }}" class="btn btn-default">Kembali</a>
         <br><br>
 
-      <form action="{{ route('products.store') }}" method="POST">
-      <!-- <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data"> -->
+      <!-- <form action="{{ route('products.store') }}" method="POST"> -->
+      <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <!-- <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Image:</strong>
                 <input type="file" name="image" class="form-control-file" id="image" accept="image/*">
@@ -36,7 +36,7 @@
                 <p>{{ $message }}</p>
             @enderror
             </div>
-        </div> -->
+        </div>
         <div class="form-group">
             <label>Nama Produk</label>
             <input name="nama_produk" type="text" class="form-control" placeholder="...">

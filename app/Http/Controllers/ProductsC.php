@@ -109,28 +109,25 @@ class ProductsC extends Controller
             'harga_produk' => 'required', 
             'jenis' => 'required|in:pans,knitware,crewneck,hoodie,jacket', // validate jenis
             'size' => 'required|in:XS,S,M,L,XL,XXL', // validate size
-            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // validating image
         ]); 
 
-        // $input = $request->all(); 
-        // dd($input, $request->hasFile('image'));
+        // create input to be overide ...
+        $input = $request->all(); 
 
-        // if ($request->hasFile('image')) {
-        //     $image = $request->file('image');
-        //     if ($image->isValid()) {
-        //         $destinationPath = 'images/'; 
-        //         $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension(); 
-        //         $image->move($destinationPath, $profileImage); 
-        //         $input['image'] = $profileImage;
-        //     } else {
-        //         dd("salah gambar");
-        //         return redirect()->back()->withErrors(['image' => 'Invalid image file.'])->withInput();
-        //     }
-        // }
-        // else{dd("$request->hasFile filed");}
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            if ($image->isValid()) {
+                $folderPath = 'images/product/'; 
+                $imgName = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $image->move(public_path($folderPath), $imgName);
+                $input['image'] = $imgName; // overide the image path
+            } else {
+                return redirect()->back()->withErrors(['image' => 'Invalid image file.'])->withInput();
+            }
+        }
 
-        // $createdProduct = productsM::create($input);
-         productsM::create($request->all());
+         productsM::create($input);
 
         // Log the result or any relevant information
         // Log::info('Product created:', ['product_id' => $createdProduct->id, 'name' => $createdProduct->nama_produk]);
