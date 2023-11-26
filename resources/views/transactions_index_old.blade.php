@@ -25,7 +25,7 @@
         <div class="alert alert-success">{{ $message }}</div>
         @endif
         <div class="mb-3">
-    <a href="{{ route('transactions.create') }}" class="btn btn-success mr-2">Tambah Data Transaksi</a>
+  <a href="{{ route('transactions.create') }}" class="btn btn-success mr-2">Tambah Data Transaksi</a>
   <a href="{{ url('transactions/pdf2') }}" class="btn btn-warning">Unduh PDF</a>
 </div>
         <table class="table table-striped table-bordered">
