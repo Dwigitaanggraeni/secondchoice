@@ -21,7 +21,6 @@
             <h3 class="card-title">Tambah Data Transaksi</h3>
         </div>
         <div class="card-body">
-            <a href="{{ route('transactions.index') }}" class="btn btn-default">Kembali</a>
             <br><br>
 
             <form action="{{ route('mtransactions.store') }}" method="POST">
