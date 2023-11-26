@@ -25,14 +25,14 @@
         <div class="alert alert-success">{{ $message }}</div>
         @endif
         <div class="mb-3">
-    <a href="{{ route('transactions.create') }}" class="btn btn-success mr-2">Tambah Data Transaksi</a>
+  <a href="{{ route('transactions.create') }}" class="btn btn-success mr-2">Tambah Data Transaksi</a>
   <a href="{{ url('transactions/pdf2') }}" class="btn btn-warning">Unduh PDF</a>
 </div>
-        
+        <table class="table table-striped table-bordered">
           <tr>
 
           @if (Auth::user()->role == 'owner')
-          <!-- <form action="{{ route('transactions.index') }}" method="get">
+          <form action="{{ route('transactions.index') }}" method="get">
           <div class="input-group">
             <input type="search" name="search" class="form-control" placeholder="Search" value="{{$vcari}}">
             <button type="submit" class="btn btn-outline-primary mr-1"><i class="fa fa-search"></i></button>
@@ -40,12 +40,12 @@
             <a href="{{ route('transactions.index')}}">
               <button type="button" class="btn btn-outline-danger"><i class="fa fa-undo"></i></button>
           </div>
-          </form> -->
+          </form>
           @endif
           <br>
       
- <table id="myTable" class="table table-striped table-bordered" style="background-color: #d8bfd8;">
-  <thead>      
+            
+         
   <tr class="bg-dark">
   <th>Nomor Unik</th>
   <th>Nama Pelanggan</th>
@@ -57,7 +57,6 @@
   <th>Aksi</th>
 
 </tr>
-</thead>
 @if(count($transactionsM) > 0)
 @foreach ($transactionsM as $data)
 <tr>
