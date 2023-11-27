@@ -37,6 +37,7 @@ Route::get('login', [LoginC::class, 'login'])->name('login')->middleware('guest'
 Route::get('products/pdf', [ProductsC::class, 'pdf'])->name('products.pdf')->middleware('userAkses:owner,admin');
 // Route::resource('products', ProductsC::class)->middleware('userAkses:owner,admin,kasir');
 Route::get('products', [ProductsC::class, 'index'])->name('products.index')->middleware('userAkses:kasir,admin,owner');
+Route::get('products/list', [ProductsC::class, 'list'])->name('products.list')->middleware('userAkses:kasir,admin,owner');
 Route::get('products/create', [ProductsC::class, 'create'])->name('products.create')->middleware('userAkses:admin,owner');
 Route::post('products/store', [ProductsC::class, 'store'])->name('products.store')->middleware('userAkses:admin,owner');
 Route::get('products/edit/{id}', [ProductsC::class, 'edit'])->name('products.edit')->middleware('userAkses:admin');

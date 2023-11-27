@@ -49,6 +49,13 @@ class ProductsC extends Controller
         return view('products_index', compact('subtitle', 'productsM', 'vcari'));
     }
 
+    public function list(Request $request)
+    {
+        $vcari = $request->search;
+        $productList = ProductsM::where('nama_produk', 'like', "%$vcari%");
+        return $productList;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
