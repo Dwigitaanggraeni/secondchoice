@@ -9,6 +9,7 @@ use App\Models\ProductsM;
 use App\Models\LogM;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class MTransactionsC extends Controller
 {
@@ -109,6 +110,26 @@ public function store(Request $request)
         report($e);
         return redirect()->back()->withErrors(['error' => 'Something went wrong.'])->withInput();
     }
+}
+
+public function downloadpdf(){
+    // Log the user activity
+    $logM = LogM::create([
+        'id_user' => Auth::user()->id,
+        'activity' => 'User Melakukan Proses unduh PDF'
+    ]);
+
+    // Retrieve transactions data with details and products
+    $transactionsM = MTransactionM::with(['details.product'])->get();
+
+    // Create PDF instance
+    $pdf = PDF::loadView('transactions_pdf2', ['transactionsM' => $transactionsM]);
+
+    // Set paper size to A4 for landscape orientation
+    $pdf->setPaper('a4', 'landscape');
+
+    // Stream the PDF to the browser
+    return $pdf->stream('transactions.pdf2');
 }
 
 
