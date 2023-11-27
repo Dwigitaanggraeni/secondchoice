@@ -18,6 +18,12 @@ class ProductsC extends Controller
         $this->pdf = $pdf;
     }
 
+    public function countProduct()
+    {
+        $products = ProductsM::count();
+        return $products;
+    }
+
     /**
      * Display a listing of the resource.
      *

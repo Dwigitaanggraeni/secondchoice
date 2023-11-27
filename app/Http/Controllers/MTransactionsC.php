@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\MTransactionM;
 use App\Models\ProductsM;
 use App\Models\LogM;
+use App\Models\OrderdetailM;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\PDF;
@@ -18,6 +19,18 @@ class MTransactionsC extends Controller
     public function __construct(PDF $pdf)
     {
         $this->pdf = $pdf;
+    }
+
+    public function transactionCount()
+    {
+        $count = MTransactionM::count();
+        return $count;
+    }
+
+    public function getIncome()
+    {
+        $count = MTransactionM::sum('total_belanja');
+        return $count;
     }
 
     public function index()

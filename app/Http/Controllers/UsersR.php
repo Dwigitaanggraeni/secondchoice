@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersR extends Controller
 {
+    public function getUserCount()
+    {
+        $products = User::count();
+        return $products;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,8 +33,8 @@ class UsersR extends Controller
      */
     public function create()
     {
-       $subtitle = "Tambah Pengguna";
-       return view('users_create', compact('subtitle'));
+        $subtitle = "Tambah Pengguna";
+        return view('users_create', compact('subtitle'));
     }
 
     /** 
@@ -45,9 +51,9 @@ class UsersR extends Controller
             'password' => 'required',
             'password_confirm' => 'required|same:password',
             'role' => 'required',
-            
+
         ]);
-        
+
         $user = new User([
             'name' => $request->name,
             'username' => $request->username,
@@ -95,11 +101,11 @@ class UsersR extends Controller
             'name' => 'required',
             'role' => 'required',
         ]);
-    
+
         $data = $request->except(['_token', '_method',  'submit']);
-    
+
         User::where('id', $id)->update($data);
-    
+
         return redirect()->route('users.index')->with('success', 'Users berhasil diperbarui');
     }
 
@@ -115,13 +121,15 @@ class UsersR extends Controller
         return redirect()->route('users.index')->with('success', 'Produk berhasil dihapus');
     }
 
-    public function changepassword($id){
+    public function changepassword($id)
+    {
         $subtitle = "Edit Kata Sandi Pengguna";
         $data = User::find($id);
         return view('users_changepassword', compact('subtitle', 'data'));
     }
 
-    public function change(Request $request, $id){
+    public function change(Request $request, $id)
+    {
         $request->validate([
             'password_new' => 'required',
             'password_confirm' => 'required|same:password_new',
@@ -131,6 +139,6 @@ class UsersR extends Controller
             'password' => Hash::make($request->password_new),
         ]);
         return redirect()->route('users.index')
-        ->with('success', 'Kata Sandi Berhasil Diperbaharui !');
+            ->with('success', 'Kata Sandi Berhasil Diperbaharui !');
     }
 }
