@@ -99,7 +99,7 @@ class MTransactionsC extends Controller
                 $transaction->load('details');
 
                 // Calculate uang_kembali based on the sum of buying_price in orderDetails
-                $transaction->uang_kembali = $transaction->details->sum('buying_price') - $transaction->uang_bayar;
+                $transaction->uang_kembali = $transaction->uang_bayar - $transaction->details->sum('buying_price');
 
                 // add total_belanja from sum buying_price
                 $transaction->total_belanja = $transaction->details->sum('buying_price');
