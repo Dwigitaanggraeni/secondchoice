@@ -7,22 +7,30 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\TransactionsM;
 use App\Models\ProductsM;
 use App\Models\LogM;
-use PDF;
+use Barryvdh\DomPDF\PDF;
 
 class TransactionsC extends Controller
 {
-    public function index() {
+    protected $pdf;
+
+    public function __construct(PDF $pdf)
+    {
+        $this->pdf = $pdf;
+    }
+
+    public function index()
+    {
         $subtitle = "Daftar Transaksi Produk";
         $vcari = request('search');
         $transactionsM = TransactionsM::select('transactions.*', 'products.*', 'transactions.id AS id_trans')
-        ->join('products', 'products.id', '=', 'transactions.id_produk')
-        ->where('transactions.nama_pelanggan', 'LIKE', '%' . $vcari . '%')
-        ->get();
+            ->join('products', 'products.id', '=', 'transactions.id_produk')
+            ->where('transactions.nama_pelanggan', 'LIKE', '%' . $vcari . '%')
+            ->get();
         return view('transactions_index', compact('subtitle', 'transactionsM', 'vcari'));
-
     }
 
-    public function create() {
+    public function create()
+    {
         $LogM = LogM::create([
             'id_user' => Auth::user()->id,
             'activity' => 'User Melakukan Transaksi'
@@ -33,8 +41,9 @@ class TransactionsC extends Controller
 
         return view('transactions_create', compact('subtitle', 'productsM'));
     }
-    
-    public function store(Request $request){
+
+    public function store(Request $request)
+    {
         $LogM = LogM::create([
             'id_user' => Auth::user()->id,
             'activity' => 'User Dihalaman Edit Transaksi'
@@ -55,11 +64,11 @@ class TransactionsC extends Controller
         $transactions->save();
 
         // TransactionsM::create($request->post());
-        return redirect()->route('transactions.index')->
-        with('success', 'Transaksi Berhasil Ditambahkan');
+        return redirect()->route('transactions.index')->with('success', 'Transaksi Berhasil Ditambahkan');
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $LogM = LogM::create([
             'id_user' => Auth::user()->id,
             'activity' => 'User Dihalaman Edit Transaksi'
@@ -89,48 +98,46 @@ class TransactionsC extends Controller
         $transactions->nama_pelanggan = $request->input('nama_pelanggan');
         $transactions->id_produk = $request->input('id_produk');
         $transactions->uang_bayar = $request->input('uang_bayar');
-        $transactions->uang_kembali = 
-        $request->input('uang_bayar') - $products->harga_produk;
+        $transactions->uang_kembali =
+            $request->input('uang_bayar') - $products->harga_produk;
         $transactions->save();
 
         // TransactionsM::create($request->post());
-        return redirect()->route('transactions.index')->
-        with('success', 'Transaksi Berhasil Diperbaharui');
+        return redirect()->route('transactions.index')->with('success', 'Transaksi Berhasil Diperbaharui');
     }
 
-    public function delete ($id)
+    public function delete($id)
     {
         $LogM = LogM::create([
             'id_user' => Auth::user()->id,
             'activity' => 'User Menghapus Transaksi'
         ]);
-        TransactionsM::where('id',$id)->delete();
-        return redirect()->route('transactions.index')->
-        with('success', 'Transaksi Berhasil dihapus');
-        } 
-
-        public function pdf($id){
-            $LogM = LogM::create([
-                'id_user' => Auth::user()->id,
-                'activity' => 'User Mencetak Struk'
-            ]);
-    
-            $transactionsM = TransactionsM::select('transactions.*', 'products.*', 'transactions.id AS id_trans')
-            ->join('products', 'products.id', '=', 'transactions.id_produk')->where('transactions.id', $id)->get();
-            $pdf = PDF::loadview('transactions_pdf',['transactionsM' => $transactionsM]);
-            return $pdf->stream('transactions.pdf');
-        }
-
-        public function pdf2(){
-            $LogM = LogM::create([
-                'id_user' => Auth::user()->id,
-                'activity' => 'User Melakukan Proses unduh PDF'
-            ]);
-            $transactionsM = TransactionsM::select('transactions.*', 'products.*', 'transactions.id AS id_trans')
-            ->join('products', 'products.id', '=', 'transactions.id_produk')->get();
-            $pdf = PDF::loadview('transactions_pdf2',['transactionsM' => $transactionsM]);
-            return $pdf->stream('transactions.pdf2');
-        }
-
+        TransactionsM::where('id', $id)->delete();
+        return redirect()->route('transactions.index')->with('success', 'Transaksi Berhasil dihapus');
     }
-    
+
+    public function pdf($id)
+    {
+        $LogM = LogM::create([
+            'id_user' => Auth::user()->id,
+            'activity' => 'User Mencetak Struk'
+        ]);
+
+        $transactionsM = TransactionsM::select('transactions.*', 'products.*', 'transactions.id AS id_trans')
+            ->join('products', 'products.id', '=', 'transactions.id_produk')->where('transactions.id', $id)->get();
+        $this->pdf->loadview('transactions_pdf', ['transactionsM' => $transactionsM]);
+        return $this->pdf->stream('transactions.pdf');
+    }
+
+    public function pdf2()
+    {
+        $LogM = LogM::create([
+            'id_user' => Auth::user()->id,
+            'activity' => 'User Melakukan Proses unduh PDF'
+        ]);
+        $transactionsM = TransactionsM::select('transactions.*', 'products.*', 'transactions.id AS id_trans')
+            ->join('products', 'products.id', '=', 'transactions.id_produk')->get();
+        $this->pdf->loadview('transactions_pdf2', ['transactionsM' => $transactionsM]);
+        return $this->pdf->stream('transactions.pdf2');
+    }
+}

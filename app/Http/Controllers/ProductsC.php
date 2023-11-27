@@ -6,12 +6,18 @@ use Illuminate\Http\Request;
 use App\Models\ProductsM;
 
 use App\Models\LogM;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Support\Facades\Auth;
-use PDF;
-
 
 class ProductsC extends Controller
 {
+    protected $pdf;
+
+    public function __construct(PDF $pdf)
+    {
+        $this->pdf = $pdf;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +31,7 @@ class ProductsC extends Controller
         ]);
 
         // $products = Products::latest()->paginate(5);
-     
+
         // return view('products_index',compact('products'))
         //     ->with('i', (request()->input('page', 1) - 1) * 5);
 
@@ -34,8 +40,7 @@ class ProductsC extends Controller
         // return view('products_index', compact('subtitle', 'productsM'));
         $vcari = request('search');
         $productsM = ProductsM::where('nama_produk', 'like', "%$vcari%")->orWhere('created_At', 'like', "%$vcari%")->paginate(10);
-        return view('products_index', compact('subtitle','productsM', 'vcari'));
-
+        return view('products_index', compact('subtitle', 'productsM', 'vcari'));
     }
 
     /**
@@ -60,85 +65,46 @@ class ProductsC extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(Request $request)
-    // {
+    public function store(Request $request)
+    {
+        // dd($request);
+        try {
+            $logM = LogM::create([
+                'id_user' => Auth::user()->id,
+                'activity' => 'User Melakukan Proses Tambah Produk'
+            ]);
 
-    //     try {
-    //         $LogM = LogM::create([
-    //             'id_user' => Auth::user()->id,
-    //             'activity' => 'User Melakukan Proses Tambah Produk'
-                
-    //         ]);
-    
-    //         $request->validate([
-    //             'nama_produk' => 'required',
-    //             'harga_produk' => 'required',
-    //             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-    //         ]);
-    
-    //         $input = $request->all();
-       
-    //         if ($image = $request->file('image')) {
-    //             $destinationPath = 'images/';
-    //             $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-    //             $image->move($destinationPath, $profileImage);
-    //             $input['image'] = "$profileImage";
-    //         }
-    //         productsM::create($request->post());
-    //         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan');
-    //     } catch (Throwable $e) {
-    //         report($e);
-     
-    //         return false;
-    //     }
-    
-    //     // dd($request);
-        
-    // }
-    public function store(Request $request) 
-{ 
-    // dd($request);
-    try { 
-        $logM = LogM::create([ 
-            'id_user' => Auth::user()->id, 
-            'activity' => 'User Melakukan Proses Tambah Produk' 
-        ]); 
+            $request->validate([
+                'nama_produk' => 'required',
+                'harga_produk' => 'required',
+                'jenis' => 'required|in:pans,knitware,crewneck,hoodie,jacket', // validate jenis
+                'size' => 'required|in:XS,S,M,L,XL,XXL', // validate size
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // validating image
+            ]);
 
-        $request->validate([ 
-            'nama_produk' => 'required', 
-            'harga_produk' => 'required', 
-            'jenis' => 'required|in:pans,knitware,crewneck,hoodie,jacket', // validate jenis
-            'size' => 'required|in:XS,S,M,L,XL,XXL', // validate size
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // validating image
-        ]); 
+            // create input to be overide ...
+            $input = $request->all();
 
-        // create input to be overide ...
-        $input = $request->all(); 
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            if ($image->isValid()) {
-                $folderPath = 'images/product/'; 
-                $imgName = date('YmdHis') . "." . $image->getClientOriginalExtension();
-                $image->move(public_path($folderPath), $imgName);
-                $input['image'] = $imgName; // overide the image path
-            } else {
-                return redirect()->back()->withErrors(['image' => 'Invalid image file.'])->withInput();
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                if ($image->isValid()) {
+                    $folderPath = 'images/product/';
+                    $imgName = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                    $image->move(public_path($folderPath), $imgName);
+                    $input['image'] = $imgName; // overide the image path
+                } else {
+                    return redirect()->back()->withErrors(['image' => 'Invalid image file.'])->withInput();
+                }
             }
+
+            productsM::create($input);
+
+            return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan');
+        } catch (\Exception $e) {
+            report($e);
+            return redirect()->back()->withErrors(['error' => 'Something went wrong.'])->withInput();
         }
-
-         productsM::create($input);
-
-        // Log the result or any relevant information
-        // Log::info('Product created:', ['product_id' => $createdProduct->id, 'name' => $createdProduct->nama_produk]);
-        // dd($request->all());
-
-        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan'); 
-    } catch (\Exception $e) { 
-        report($e); 
-        return redirect()->back()->withErrors(['error' => 'Something went wrong.'])->withInput(); 
-    } 
-}
+    }
 
 
     /**
@@ -147,13 +113,6 @@ class ProductsC extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
-
-
-
-
-
-
     public function show($id)
     {
         //
@@ -167,8 +126,6 @@ class ProductsC extends Controller
      */
     public function edit($id)
     {
-        
-
         $LogM = LogM::create([
             'id_user' => Auth::user()->id,
             'activity' => 'User Melakukan Edit Produk'
@@ -188,20 +145,20 @@ class ProductsC extends Controller
      */
     public function update(Request $request, $id)
     {
-        $LogM = LogM::create([
+        LogM::create([
             'id_user' => Auth::user()->id,
             'activity' => 'User Melakukan Proses Edit'
         ]);
 
         $request->validate([
-         'nama_produk' => 'required',
-         'harga_produk' => 'required',
-     ]);
+            'nama_produk' => 'required',
+            'harga_produk' => 'required',
+        ]);
 
-     $data = request()->except(['_token', '_method', 'submit']);
+        $data = request()->except(['_token', '_method', 'submit']);
 
-     productsM::where('id', $id)->update($data);
-     return redirect()->route('products.index')->with('success', 'Barang berhasil diperbaharui');
+        productsM::where('id', $id)->update($data);
+        return redirect()->route('products.index')->with('success', 'Barang berhasil diperbaharui');
     }
 
     /**
@@ -221,12 +178,13 @@ class ProductsC extends Controller
         return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus');
     }
 
-    public function pdf(){
+    public function pdf()
+    {
         $productsM = ProductsM::all();
-        $pdf = PDF::loadview('products_pdf',['productsM' => $productsM]);
+        // $pdf = PDF::loadview('products_pdf', ['productsM' => $productsM]);
+        $this->pdf->loadView('products_pdf', ['productsM' => $productsM]);
         // Set paper size to A4 for landscape orientation
-        $pdf->setPaper('a4', 'landscape');
-        return $pdf->stream('products.pdf');
+        $this->pdf->setPaper('a4', 'landscape');
+        return $this->pdf->stream('products.pdf');
     }
-
 }
