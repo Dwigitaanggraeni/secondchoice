@@ -11,7 +11,7 @@ class MTransactionM extends Model
 
     protected $table = "tbl_transactions";
     protected $guarded = []; //buat semua filed bisa diisi
-    
+
     public function details()
     {
         return $this->hasMany(OrderdetailM::class, 'transaction_id');
@@ -21,5 +21,4 @@ class MTransactionM extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
 }

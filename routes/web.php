@@ -46,7 +46,8 @@ Route::delete('products/delete/{id}', [ProductsC::class, 'destroy'])->name('prod
 // multiple transaction
 Route::get('transactions', [MTransactionsC::class, 'index'])->name('mtransactions.index')->middleware('userAkses:kasir,admin,owner');
 Route::post('mtransactions/store', [MTransactionsC::class, 'store'])->name('mtransactions.store')->middleware('userAkses:kasir');
-Route::get('mtransactions/download-pdf', [MTransactionsC::class, 'downloadpdf'])->name('mtransactions.downloadpdf')->middleware('userAkses:kasir,owner,admin');
+Route::get('mtransactions/download-pdf', [MTransactionsC::class, 'downloadpdf'])->name('mtransactions.downloadpdf')->middleware('userAkses:kasir');
+Route::get('mtransactions/download-single-pdf/{id}', [MTransactionsC::class, 'downloadSingle'])->name('mtransactions.downloadSingle')->middleware('userAkses:kasir');
 
 Route::get('transactions/create', [TransactionsC::class, 'create'])->name('transactions.create')->middleware('userAkses:kasir,admin');
 Route::post('transactions/store', [TransactionsC::class, 'store'])->name('transactions.store')->middleware('userAkses:kasir');
