@@ -224,6 +224,8 @@ class ProductsC extends Controller
     public function pdf(){
         $productsM = ProductsM::all();
         $pdf = PDF::loadview('products_pdf',['productsM' => $productsM]);
+        // Set paper size to A4 for landscape orientation
+        $pdf->setPaper('a4', 'landscape');
         return $pdf->stream('products.pdf');
     }
 
