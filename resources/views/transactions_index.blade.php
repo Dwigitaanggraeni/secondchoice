@@ -38,7 +38,7 @@
                     <td>{{ $transaction->nama_pelanggan }}</td>
                     <td>
                         @foreach ($transaction->details as $detail)
-                        {{ $detail->product->nama_produk }} - {{ $detail->product->harga_produk }}
+                        {{ $detail->product_name }} - {{ $detail->buying_price }}
                         <br>
                         @endforeach
                     </td>

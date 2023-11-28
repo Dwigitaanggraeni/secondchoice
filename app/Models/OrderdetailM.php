@@ -17,9 +17,9 @@ class OrderdetailM extends Model
     }
     
 
-    public function product()
-    {
-        return $this->belongsTo(ProductsM::class); // dan satu buah transaksi dapat memiliki satu buah product
-    }
+    // public function product()
+    // {
+    //     return $this->belongsTo(ProductsM::class); // dan satu buah transaksi dapat memiliki satu buah product
+    // }
 
 }

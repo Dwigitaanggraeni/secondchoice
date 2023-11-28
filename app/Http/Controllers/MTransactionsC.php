@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\MTransactionM;
 use App\Models\ProductsM;
 use App\Models\LogM;
-use App\Models\OrderdetailM;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\PDF;
@@ -38,7 +37,7 @@ class MTransactionsC extends Controller
         $subtitle = "Daftar Transaksi Produk";
         $vcari = request('search');
 
-        $transactionsM = MTransactionM::with(['details.product'])
+        $transactionsM = MTransactionM::with(['details'])
             ->where('nama_pelanggan', 'LIKE', '%' . $vcari . '%')
             ->get();
 
@@ -51,7 +50,7 @@ class MTransactionsC extends Controller
         try {
             DB::transaction(function () use ($request) {
                 // Create a log record
-                $logM = LogM::create([
+                LogM::create([
                     'id_user' => Auth::user()->id,
                     'activity' => 'User Melakukan Proses Tambah Produk'
                 ]);
@@ -87,12 +86,17 @@ class MTransactionsC extends Controller
 
                     // Create order details for each selected product
                     $orderd = $transaction->details()->create([
-                        'product_id' => $productID,
+                        'product_name' => $product->nama_produk,
+                        'product_image' => $product->image,
+                        'product_size' => $product->size,
+                        'product_type' => $product->jenis,
                         'buying_price' => $product->harga_produk,
-                        'qty' => 1, // Assuming qty is always 1, adjust as needed
                     ]);
 
                     Log::info('orderd:', ['orderd' => $orderd]);
+
+                    // Delete the product after adding it to the order details
+                    $product->delete();
                 }
 
                 // Load the details relationship before accessing it
@@ -128,7 +132,7 @@ class MTransactionsC extends Controller
         ]);
 
         // find by id
-        $transactionsM = MTransactionM::with(['details.product'])->find($id);
+        $transactionsM = MTransactionM::with(['details'])->find($id);
 
         $this->pdf->loadView('transactions_single_pdf', ['transactionsM' => $transactionsM]);
 
@@ -148,7 +152,7 @@ class MTransactionsC extends Controller
         ]);
 
         // Retrieve transactions data with details and products
-        $transactionsM = MTransactionM::with(['details.product'])->get();
+        $transactionsM = MTransactionM::with(['details'])->get();
 
         // Create PDF instance
         // $pdf = PDF::loadView('transactions_pdf2', ['transactionsM' => $transactionsM]);

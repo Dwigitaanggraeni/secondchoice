@@ -4,23 +4,23 @@
 <head>
     <title>Transactions PDF</title>
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
 
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
+    table,
+    th,
+    td {
+        border: 1px solid black;
+    }
 
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-        }
+    th,
+    td {
+        padding: 10px;
+        text-align: left;
+    }
     </style>
 </head>
 
@@ -47,7 +47,7 @@
                 <td>{{ $transaction->nama_pelanggan }}</td>
                 <td>
                     @foreach ($transaction->details as $detail)
-                    {{ $detail->product->nama_produk }} - {{ $detail->product->harga_produk }}<br>
+                    {{ $detail->product_name }} - {{ $detail->buying_price }}<br>
                     @endforeach
                 </td>
                 <td>{{ number_format($transaction->total_belanja, 2) }}</td>

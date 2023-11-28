@@ -61,8 +61,7 @@
                         <td>
                             @if ($products->image)
                             <a href="{{ asset('images/product/' . $products->image) }}" target="_blank">
-                                <img src="{{ asset('images/product/' . $products->image) }}" alt="Product Image"
-                                    width="50">
+                                <img src="{{ asset('images/product/' . $products->image) }}" alt="Product Image" width="50">
                             </a>
                             @else
                             No Image
@@ -76,15 +75,13 @@
                         <td>
                             <div class="btn-group">
                                 @if (Auth::user()->role == 'admin')
-                                <a href="{{ route('products.edit', $products->id) }}"
-                                    class="btn btn-sm btn-outline-dark mr-1">
+                                <a href="{{ route('products.edit', $products->id) }}" class="btn btn-sm btn-outline-dark mr-1">
                                     <i class="fa fa-edit"></i>
                                 </a>
                                 <form action="{{ route('products.destroy', $products->id )}}" method="POST">
                                     @csrf
                                     @method('delete')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger mr-1"
-                                        onclick="return confirm('Konfirmasi Hapus Data !?')">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger mr-1" onclick="return confirm('Konfirmasi Hapus Data !?')">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </form>

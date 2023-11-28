@@ -67,7 +67,7 @@
         <div class="item-label">Nama Produk:</div>
         <div class="products">
             @foreach ($transactionsM->details as $detail)
-            <div class="product-item">{{ $detail->product->nama_produk }} - {{ $detail->product->harga_produk }}</div>
+            <div class="product-item">{{ $detail->product_name }} - {{ $detail->buying_price }}</div>
             @endforeach
         </div>
 

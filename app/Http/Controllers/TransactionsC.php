@@ -82,7 +82,7 @@ class TransactionsC extends Controller
 
     public function update(Request $request, $id)
     {
-        $LogM = LogM::create([
+        LogM::create([
             'id_user' => Auth::user()->id,
             'activity' => 'User Melakukan Proses Edit Transaksi'
         ]);
