@@ -146,13 +146,43 @@ class MTransactionsC extends Controller
     public function downloadpdf()
     {
         // Log the user activity
-        $logM = LogM::create([
+        LogM::create([
             'id_user' => Auth::user()->id,
             'activity' => 'User Melakukan Proses unduh PDF'
         ]);
 
         // Retrieve transactions data with details and products
         $transactionsM = MTransactionM::with(['details'])->get();
+
+        // Create PDF instance
+        // $pdf = PDF::loadView('transactions_pdf2', ['transactionsM' => $transactionsM]);
+        $this->pdf->loadView('transactions_pdf2', ['transactionsM' => $transactionsM]);
+
+        // Set paper size to A4 for landscape orientation
+        $this->pdf->setPaper('a4', 'landscape');
+
+        // Stream the PDF to the browser
+        return $this->pdf->stream('transactions.pdf2');
+    }
+
+    public function downloadPdfByDate(Request $request)
+    {
+        // Log the user activity
+        LogM::create([
+            'id_user' => Auth::user()->id,
+            'activity' => 'User Melakukan Proses unduh PDF'
+        ]);
+
+        // Validate the input parameters
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        // Retrieve transactions data with details and products based on the date range
+        $transactionsM = MTransactionM::with(['details'])
+            ->whereBetween('created_at', [$request->start_date, $request->end_date])
+            ->get();
 
         // Create PDF instance
         // $pdf = PDF::loadView('transactions_pdf2', ['transactionsM' => $transactionsM]);
